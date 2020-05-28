@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  arauto:
+    build:
+        context: ./
+        dockerfile: Dockerfile
+    image: arauto:latest
+    command: streamlit run run.py
+    container_name: arauto_main
+    volumes:
+      - app-volume:/app
+    networks:
+      - arauto_network
+    expose:
+      - "8501"
+    ports:
+      - "8501:8501"
+
+  arauto_api:
+    image: arauto:latest
+    command: python3 main.py
+    container_name: arauto_api
+    volumes:
+      - app-volume:/app
+    networks:
+      - arauto_network
+    expose:
+      - "5000"
+    ports:
+      - "5000:5000"
+networks:
+  arauto_network:
+    driver: bridge
+volumes:
+     app-volume:
